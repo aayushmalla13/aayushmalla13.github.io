@@ -1,0 +1,29 @@
+# Project template
+- layout: top-middle
+  name: Staff and Student Managment 
+  link: https://github.com/aayushmalla13/Staff-and-Student-Managment #Link to project (eg. sproogen.github.io/modern-resume-theme)(optional)
+  github: https://github.com/aayushmalla13/Staff-and-Student-Managment #Github page for project (eg. sproogen/modern-resume-theme)(optional)
+  #quote: Staff and Student Management Software is a software written in C++ framework QT. This project was done as a semester project for second semester Kathmandu University. The main purpose of this software is to easily add, modify and search records .
+    #Short overview of the project (optional)
+  description: | # this will include new lines to allow paragraphs
+    Staff and Student Management Software is a software written in C++ framework QT. This project was done as a semester project for second semester Kathmandu University. The main purpose of this software is to easily add, modify and search records .
+
+- layout: top-middle
+  name: Digitized Info Wall
+  link: https://github.com/aayushmalla13/Digitized-Info-wall #Link to project (eg. sproogen.github.io/modern-resume-theme)(optional)
+  github: https://github.com/aayushmalla13/Digitized-Info-wall #Github page for project (eg. sproogen/modern-resume-theme)(optional)
+  #quote: Staff and Student Management Software is a software written in C++ framework QT. This project was done as a semester project for second semester Kathmandu University. The main purpose of this software is to easily add, modify and search records .
+    #Short overview of the project (optional)
+  description: | # this will include new lines to allow paragraphs
+    Digitized Info Wall is a website written using HTML,CSS,JS,PHP. This project was done as a 3rd semester project.The main purpose of this website is to provide a standard official communication medium for students and teachers such tat they can exchange notes,read notices,chat with is others.
+- layout: top-middle
+  name: Xplore Nepal 
+  link: https://github.com/aayushmalla13/Xplore-Nepal #Link to project (eg. sproogen.github.io/modern-resume-theme)(optional)
+  github: https://github.com/aayushmalla13/Xplore-Nepal #Github page for project (eg. sproogen/modern-resume-theme)(optional)
+  #quote: Staff and Student Management Software is a software written in C++ framework QT. This project was done as a semester project for second semester Kathmandu University. The main purpose of this software is to easily add, modify and search records .
+    #Short overview of the project (optional)
+  description: | # this will include new lines to allow paragraphs
+    Xplore Nepal is a tourist app written in java IDE Android Studio.This project was done as a 4th semester project.The main purpose of this app is to give information about various tourist area of Nepal as well as other informations like hotels,restaurants,etc and guide them to respective places.
+
+
+
