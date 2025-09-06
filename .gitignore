@@ -1,0 +1,17 @@
+# deps & caches
+node_modules/
+.pnpm-store/
+# next build
+.next/
+out/
+dist/
+# logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-error.log*
+# env
+.env*
+# editors / OS
+.DS_Store
+.vscode/
+.idea/
