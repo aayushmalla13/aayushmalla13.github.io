@@ -1,3 +1,4 @@
+# .github/workflows/pages.yml
 name: Deploy to GitHub Pages
 
 on:
@@ -25,8 +26,12 @@ jobs:
           node-version: 20
           cache: pnpm
 
-      - run: corepack enable
-      - run: corepack prepare pnpm@9 --activate
+      # Install pnpm CLI (this fixes "pnpm: not found")
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9
+
+      - run: pnpm -v
 
       - name: Install deps
         run: pnpm install --frozen-lockfile
@@ -36,12 +41,7 @@ jobs:
 
       - name: Verify static export exists
         run: |
-          if [ ! -f out/index.html ]; then
-            echo "❌ No out/index.html. Did you set output:'export' in next.config.mjs?"
-            echo "next.config.mjs should include:"
-            echo "  export default { output: 'export', images:{unoptimized:true}, trailingSlash:true }"
-            exit 1
-          fi
+          test -f out/index.html || (echo "❌ out/index.html missing. Set output:'export' in next.config.mjs" && exit 1)
           echo "✅ out/index.html found."
           ls -la out | head -n 50
 
