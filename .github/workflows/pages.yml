@@ -28,10 +28,25 @@ jobs:
       - run: corepack enable
       - run: corepack prepare pnpm@9 --activate
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - name: Install deps
+        run: pnpm install --frozen-lockfile
 
-      - run: |
+      - name: Build (Next static export)
+        run: pnpm build
+
+      - name: Verify static export exists
+        run: |
+          if [ ! -f out/index.html ]; then
+            echo "❌ No out/index.html. Did you set output:'export' in next.config.mjs?"
+            echo "next.config.mjs should include:"
+            echo "  export default { output: 'export', images:{unoptimized:true}, trailingSlash:true }"
+            exit 1
+          fi
+          echo "✅ out/index.html found."
+          ls -la out | head -n 50
+
+      - name: Prepare artifact for Pages
+        run: |
           touch out/.nojekyll
           if [ -f CNAME ]; then
             cp CNAME out/
