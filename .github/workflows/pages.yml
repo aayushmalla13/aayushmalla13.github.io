@@ -2,7 +2,7 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, master ]
   workflow_dispatch:
 
 permissions:
@@ -17,21 +17,52 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      CI: false
+      NEXT_TELEMETRY_DISABLED: 1
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'npm'
 
-      - run: corepack enable
-      - run: corepack prepare pnpm@9 --activate
+      - name: Print env
+        run: |
+          node -v
+          npm -v
+          ls -la
+          cat package.json
 
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm build
+      - name: Install deps (npm)
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci --no-audit --no-fund
+          else
+            npm install --no-audit --no-fund
+          fi
 
-      - run: |
+      - name: Ensure Next present (safety net)
+        run: |
+          npx --yes next --version || npm i -D next@latest
+
+      - name: Build (Next static export)
+        run: npm run build
+
+      - name: Verify static export exists
+        run: |
+          if [ ! -f out/index.html ]; then
+            echo "❌ No out/index.html."
+            echo "Make sure next.config.mjs includes:"
+            echo "export default { output:'export', trailingSlash:true, images:{unoptimized:true} }"
+            exit 1
+          fi
+          echo "✅ out/index.html found."
+          ls -la out | head -n 50
+
+      - name: Prepare artifact for Pages
+        run: |
           touch out/.nojekyll
           if [ -f CNAME ]; then
             cp CNAME out/
