@@ -1,3 +1,4 @@
+# .github/workflows/pages.yml
 name: Deploy to GitHub Pages
 
 on:
@@ -18,22 +19,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
-      CI: false
       NEXT_TELEMETRY_DISABLED: 1
+      CI: false
     steps:
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'npm'
-
-      - name: Print env
-        run: |
-          node -v
-          npm -v
-          ls -la
-          cat package.json
+          cache: npm
 
       - name: Install deps (npm)
         run: |
@@ -43,32 +37,18 @@ jobs:
             npm install --no-audit --no-fund
           fi
 
-      - name: Ensure Next present (safety net)
-        run: |
-          npx --yes next --version || npm i -D next@latest
-
       - name: Build (Next static export)
         run: npm run build
 
-      - name: Verify static export exists
+      - name: Verify export
         run: |
-          if [ ! -f out/index.html ]; then
-            echo "❌ No out/index.html."
-            echo "Make sure next.config.mjs includes:"
-            echo "export default { output:'export', trailingSlash:true, images:{unoptimized:true} }"
-            exit 1
-          fi
+          test -f out/index.html || (echo "❌ out/index.html missing. Set output:'export' in next.config.mjs" && exit 1)
           echo "✅ out/index.html found."
-          ls -la out | head -n 50
 
-      - name: Prepare artifact for Pages
+      - name: Prepare artifact
         run: |
           touch out/.nojekyll
-          if [ -f CNAME ]; then
-            cp CNAME out/
-          else
-            echo "aayushmalla.com.np" > out/CNAME
-          fi
+          if [ -f CNAME ]; then cp CNAME out/; fi
 
       - uses: actions/upload-pages-artifact@v3
         with:
