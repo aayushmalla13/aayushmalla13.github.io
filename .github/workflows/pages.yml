@@ -24,12 +24,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm
+          cache: 'pnpm'
 
-      # Install pnpm CLI (this fixes "pnpm: not found")
-      - uses: pnpm/action-setup@v3
+      # Install pnpm CLI (fixes "pnpm: not found")
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 9
+          run_install: false
 
       - run: pnpm -v
 
@@ -41,7 +43,10 @@ jobs:
 
       - name: Verify static export exists
         run: |
-          test -f out/index.html || (echo "❌ out/index.html missing. Set output:'export' in next.config.mjs" && exit 1)
+          if [ ! -f out/index.html ]; then
+            echo "❌ No out/index.html. Add to next.config.mjs: output:'export', images:{unoptimized:true}, trailingSlash:true"
+            exit 1
+          fi
           echo "✅ out/index.html found."
           ls -la out | head -n 50
 
