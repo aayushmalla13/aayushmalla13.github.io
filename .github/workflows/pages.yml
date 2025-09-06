@@ -1,4 +1,3 @@
-# .github/workflows/pages.yml
 name: Deploy to GitHub Pages
 
 on:
@@ -24,27 +23,26 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: 'pnpm'
+          cache: 'npm'
 
-      # Install pnpm CLI (fixes "pnpm: not found")
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-          run_install: false
-
-      - run: pnpm -v
-
+      # Install deps with npm (works even if you use pnpm locally)
       - name: Install deps
-        run: pnpm install --frozen-lockfile
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
+      # Build Next.js (static export) -> must produce ./out
       - name: Build (Next static export)
-        run: pnpm build
+        run: npm run build
 
       - name: Verify static export exists
         run: |
           if [ ! -f out/index.html ]; then
-            echo "❌ No out/index.html. Add to next.config.mjs: output:'export', images:{unoptimized:true}, trailingSlash:true"
+            echo "❌ No out/index.html. Ensure next.config.mjs includes:"
+            echo "   export default { output:'export', images:{unoptimized:true}, trailingSlash:true }"
             exit 1
           fi
           echo "✅ out/index.html found."
