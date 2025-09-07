@@ -25,6 +25,46 @@ export function useScrollNavigation(
   useEffect(() => {
     if (!isEnabled) return;
 
+    let touchStartY = 0;
+    let touchEndY = 0;
+
+    const handleTouchStart = (e: TouchEvent) => {
+      touchStartY = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      touchEndY = e.changedTouches[0].clientY;
+      const scrollingElement = document.scrollingElement || document.documentElement;
+      const { scrollTop, scrollHeight, clientHeight } = scrollingElement;
+      const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 2;
+      const isAtTop = scrollTop < 2;
+      const now = Date.now();
+
+      // Prevent rapid successive touch events
+      if (now - scrollRef.current.lastWheelTime < 500) {
+        return;
+      }
+
+      const touchDiff = touchStartY - touchEndY;
+      const minSwipeDistance = 50; // minimum distance for swipe
+
+      if (Math.abs(touchDiff) >= minSwipeDistance) {
+        if ((isAtBottom && touchDiff > 0) || (isAtTop && touchDiff < 0)) {
+          scrollRef.current.lastWheelTime = now;
+          
+          // Special handling for contact page
+          const isContactPage = document.querySelector('[data-section="contact"]') !== null;
+          
+          if (isAtBottom && isContactPage) {
+            // When at bottom of contact page, go to home
+            onNavigate('down'); // Using down to trigger the wrap-around logic
+          } else {
+            onNavigate(touchDiff > 0 ? 'down' : 'up');
+          }
+        }
+      }
+    };
+
     const handleWheel = (e: WheelEvent) => {
       const scrollingElement = document.scrollingElement || document.documentElement;
       const { scrollTop, scrollHeight, clientHeight } = scrollingElement;
@@ -67,20 +107,22 @@ export function useScrollNavigation(
         // Store last scroll position for reference
         const scrollingElement = document.scrollingElement || document.documentElement;
         scrollRef.current.lastScrollTop = scrollingElement.scrollTop;
-      }, 150);
+      }, 100);
     };
 
-    // Add event listeners with proper type casting for handleWheel
-    window.addEventListener('wheel', handleWheel as EventListener, { passive: false });
-    window.addEventListener('scroll', handleScroll);
+    document.addEventListener('wheel', handleWheel, { passive: false });
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
+    document.addEventListener('scroll', handleScroll, { passive: true });
 
-    // Cleanup
     return () => {
-      window.removeEventListener('wheel', handleWheel as EventListener);
-      window.removeEventListener('scroll', handleScroll);
+      document.removeEventListener('wheel', handleWheel);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchend', handleTouchEnd);
+      document.removeEventListener('scroll', handleScroll);
       if (scrollRef.current.scrollTimeout) {
         clearTimeout(scrollRef.current.scrollTimeout);
       }
     };
-  }, [onNavigate, isEnabled]);
+  }, [isEnabled, onNavigate]);
 }
