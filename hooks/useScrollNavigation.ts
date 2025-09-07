@@ -45,8 +45,16 @@ export function useScrollNavigation(
       const minSwipeDistance = 50; // minimum distance for swipe
 
       if (Math.abs(touchDiff) >= minSwipeDistance) {
-        scrollRef.current.lastWheelTime = now;
-        onNavigate(touchDiff > 0 ? 'down' : 'up');
+        const scrollingElement = document.scrollingElement || document.documentElement;
+        const { scrollTop, scrollHeight, clientHeight } = scrollingElement;
+        const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 2;
+        const isAtTop = scrollTop < 2;
+
+        // Only navigate if at the top or bottom
+        if ((touchDiff > 0 && isAtBottom) || (touchDiff < 0 && isAtTop)) {
+          scrollRef.current.lastWheelTime = now;
+          onNavigate(touchDiff > 0 ? 'down' : 'up');
+        }
       }
     };
 
