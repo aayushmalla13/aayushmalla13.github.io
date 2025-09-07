@@ -39,9 +39,16 @@ const GeometricElement = ({ className, delay }: { className: string; delay: numb
   )
 }
 
-const FloatingParticle = ({ delay, x, y }: { delay: number; x: number; y: number }) => {
-  const animationDuration = `${15 + Math.random() * 10}s`
-  const size = Math.random() * 1.5 + 0.5
+const FloatingParticle = ({ delay, x, y, index }: { delay: number; x: number; y: number; index: number }) => {
+  // Use fixed values based on index to avoid hydration mismatch
+  const baseSize = 0.5
+  const sizeVariation = 0.3
+  const size = baseSize + ((index % 3) * sizeVariation)
+  
+  // Fixed animation duration per particle
+  const baseAnimationDuration = 15
+  const durationVariation = 3
+  const animationDuration = `${baseAnimationDuration + (index % 5) * durationVariation}s`
 
   return (
     <div
@@ -115,9 +122,20 @@ export function MainContent({ onSectionChange }: MainContentProps) {
       <GeometricElement className="w-64 h-64 top-1/4 right-1/4" delay={4} />
 
       <div className="absolute inset-0">
-        {Array.from({ length: 12 }).map((_, i) => (
-          <FloatingParticle key={i} delay={i * 0.8} x={Math.random() * 100} y={Math.random() * 100} />
-        ))}
+        {Array.from({ length: 12 }).map((_, i) => {
+          // Use deterministic positions based on index
+          const x = ((i % 4) * 25) + ((i * 7) % 15)
+          const y = (Math.floor(i / 4) * 25) + ((i * 11) % 15)
+          return (
+            <FloatingParticle 
+              key={i}
+              index={i}
+              delay={i * 0.8} 
+              x={x} 
+              y={y}
+            />
+          )
+        })}
       </div>
 
       <div className="relative z-10 px-8 lg:px-16 max-w-4xl mx-auto">

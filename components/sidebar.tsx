@@ -1,6 +1,6 @@
 "use client"
 
-import { Home, User, FileText, Briefcase, Mail, Linkedin } from "lucide-react"
+import { Home, User, FileText, Briefcase, Mail, Linkedin, Github } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 interface SidebarProps {
@@ -18,7 +18,8 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
   ]
 
   return (
-    <div className="w-80 bg-gradient-to-b from-slate-950 via-gray-900 to-slate-900 text-white flex flex-col items-center py-8 px-6 relative border-r border-white/10">
+    // Hide sidebar on mobile, show on md and larger screens
+    <div className="hidden md:flex w-80 bg-gradient-to-b from-slate-950 via-gray-900 to-slate-900 text-white flex-col items-center py-8 px-6 relative border-r border-white/10">
       <div className="absolute inset-0 bg-gradient-to-b from-gray-900/20 via-transparent to-gray-900/40" />
 
       <div className="flex flex-col items-center mb-8 relative z-10">
@@ -39,6 +40,14 @@ export function Sidebar({ activeSection, onSectionChange }: SidebarProps) {
             className="hover:text-cyan-400 transition-colors"
           >
             <Linkedin size={20} />
+          </a>
+          <a
+            href="https://github.com/aayushmalla13"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-cyan-400 transition-colors"
+          >
+            <Github size={20} />
           </a>
           <a
             href="https://medium.com/@aayushmalla56"

@@ -1,17 +1,40 @@
-# deps & caches
+# Dependencies
 node_modules/
 .pnpm-store/
-# next build
+/.pnp
+.pnp.js
+
+# Next.js build output
 .next/
 out/
 dist/
-# logs
+build/
+
+# Logs
 npm-debug.log*
-pnpm-debug.log*
+yarn-debug.log*
 yarn-error.log*
-# env
+pnpm-debug.log*
+
+# Environment variables
 .env*
-# editors / OS
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Cache
+.vercel/
+.cache/
+*.tsbuildinfo
+
+# Editors / OS
 .DS_Store
+*.pem
 .vscode/
 .idea/
+*.swp
+*.swo
+
+# Debug
+coverage/
