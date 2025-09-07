@@ -56,7 +56,7 @@ export function ContactSection({ onSectionChange }: ContactSectionProps) {
   ]
 
   return (
-    <div className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
+    <div data-section="contact" className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
       <div className="fixed right-6 top-1/2 transform -translate-y-1/2 z-50 hidden lg:flex flex-col gap-4">
         <button
           onClick={() => onSectionChange?.("portfolio")}

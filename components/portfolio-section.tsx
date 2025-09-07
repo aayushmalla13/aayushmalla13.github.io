@@ -66,7 +66,7 @@ export function PortfolioSection() {
   const hasMoreProjects = filteredProjects.length > 4
 
   return (
-    <div className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
+    <div data-section="portfolio" className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
       <div className="max-w-6xl mx-auto px-8 py-8">
         {/* Header */}
         <div className="mb-6">

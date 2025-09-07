@@ -1,10 +1,13 @@
 
+
 "use client"
 
 import React, { useEffect, useState } from "react"
 import { Button } from "@/components/ui/button"
 import { ChevronLeft, ChevronRight, Github, Linkedin, Mail } from "lucide-react"
 import { useScrollNavigation } from "@/hooks/useScrollNavigation"
+
+// Mobile Download CV Button with info message
 
 // Mobile Download CV Button with info message
 function MobileDownloadCVButton() {

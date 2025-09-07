@@ -68,7 +68,7 @@ export function AboutSection() {
   ]
 
   return (
-    <div className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
+    <div data-section="about" className="flex-1 relative bg-gray-800 text-white overflow-y-auto">
       <div className="max-w-6xl mx-auto px-8 py-16">
         {/* Header */}
         <div className="mb-12">
