@@ -34,10 +34,6 @@ export function useScrollNavigation(
 
     const handleTouchEnd = (e: TouchEvent) => {
       touchEndY = e.changedTouches[0].clientY;
-      const scrollingElement = document.scrollingElement || document.documentElement;
-      const { scrollTop, scrollHeight, clientHeight } = scrollingElement;
-      const isAtBottom = Math.abs(scrollHeight - scrollTop - clientHeight) < 2;
-      const isAtTop = scrollTop < 2;
       const now = Date.now();
 
       // Prevent rapid successive touch events
@@ -49,19 +45,8 @@ export function useScrollNavigation(
       const minSwipeDistance = 50; // minimum distance for swipe
 
       if (Math.abs(touchDiff) >= minSwipeDistance) {
-        if ((isAtBottom && touchDiff > 0) || (isAtTop && touchDiff < 0)) {
-          scrollRef.current.lastWheelTime = now;
-          
-          // Special handling for contact page
-          const isContactPage = document.querySelector('[data-section="contact"]') !== null;
-          
-          if (isAtBottom && isContactPage) {
-            // When at bottom of contact page, go to home
-            onNavigate('down'); // Using down to trigger the wrap-around logic
-          } else {
-            onNavigate(touchDiff > 0 ? 'down' : 'up');
-          }
-        }
+        scrollRef.current.lastWheelTime = now;
+        onNavigate(touchDiff > 0 ? 'down' : 'up');
       }
     };
 

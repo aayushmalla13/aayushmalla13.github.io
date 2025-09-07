@@ -1,6 +1,7 @@
 "use client"
 import { useEffect, useState } from "react"
 import { ChevronLeft, ChevronRight } from "lucide-react"
+import { useScrollNavigation } from "@/hooks/useScrollNavigation"
 
 interface MainContentProps {
   onSectionChange?: (section: string) => void
@@ -73,6 +74,23 @@ export function MainContent({ onSectionChange }: MainContentProps) {
   const [currentTitle, setCurrentTitle] = useState(0)
   const staticText = "I'm "
   const titles = ["Data Engineer", "ML Enthusiast"]
+
+  const handleNavigation = (direction: 'up' | 'down') => {
+    const sections = ['home', 'about', 'resume', 'portfolio', 'contact'];
+    const currentSection = document.querySelector('[data-section]')?.getAttribute('data-section');
+    const currentIndex = sections.indexOf(currentSection || 'home');
+    
+    let nextIndex;
+    if (direction === 'down') {
+      nextIndex = (currentIndex + 1) % sections.length;
+    } else {
+      nextIndex = currentIndex <= 0 ? sections.length - 1 : currentIndex - 1;
+    }
+    
+    onSectionChange?.(sections[nextIndex]);
+  }
+
+  useScrollNavigation(handleNavigation);
 
   useEffect(() => {
     let currentIndex = 0
